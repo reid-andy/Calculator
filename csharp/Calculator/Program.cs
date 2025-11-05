@@ -1,4 +1,4 @@
-﻿using CalculatorLibrary;
+using CalculatorLibrary;
 using System;
 using System.Collections.Generic;
 namespace CalculatorProgram
