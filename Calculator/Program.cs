@@ -9,7 +9,11 @@ namespace CalculatorProgram
         static void Main(string[] args)
         {
             bool endApp = false;
+            bool skipNum1 = false;
             int counter = 0;
+            double num1Placeholder = 0;
+            int sleepingTime = 400;
+
             List<Calculation> history = new List<Calculation>();
 
             // Display title as the C# console calculator app.
@@ -21,19 +25,28 @@ namespace CalculatorProgram
             while (!endApp)
             {
                 // Declare variables and set to empty.
-                string numInput1 = "";
-                string numInput2 = "";
+                string? numInput1 = "";
+                double cleanNum1 = 0;
+                string? numInput2 = "";
                 double result = 0;
 
-                // Ask the user to type the first number.
-                Console.Write("Type a number, and then press Enter: ");
-                numInput1 = Console.ReadLine();
-
-                double cleanNum1 = 0;
-                while (!double.TryParse(numInput1, out cleanNum1))
+                if (!skipNum1)
                 {
-                    Console.Write("This is not valid input. Please enter an integer value: ");
+                    // Ask the user to type the first number.
+                    Console.Write("Type a number, and then press Enter: ");
                     numInput1 = Console.ReadLine();
+
+                    while (!double.TryParse(numInput1, out cleanNum1))
+                    {
+                        Console.Write("This is not valid input. Please enter an integer value: ");
+                        numInput1 = Console.ReadLine();
+                    }
+                }
+                else
+                {
+                    cleanNum1 = num1Placeholder;
+                    Console.WriteLine($"First number is {num1Placeholder}");
+                    skipNum1 = false;
                 }
 
                 // Ask the user to type the second number.
@@ -55,10 +68,9 @@ namespace CalculatorProgram
                 Console.WriteLine("\td - Divide");
                 Console.WriteLine("\te - Exponent");
                 Console.WriteLine("\tt - 10x");
-                Console.WriteLine("\th - View History");
                 Console.Write("Your option? ");
 
-                string op = Console.ReadLine();
+                string? op = Console.ReadLine();
 
                 try
                 {
@@ -86,10 +98,24 @@ namespace CalculatorProgram
                 else Console.WriteLine($"{counter} calculations completed this session\n");
 
                 // Wait for the user to respond before closing.
-                Console.Write("Press 'n' and Enter to close the app\nPress 'h' to view the last 5 calculations\nor press any other key and Enter to continue: ");
-                string userInput = Console.ReadLine();
+                Thread.Sleep(sleepingTime);
+                Console.WriteLine("Press 'n' and Enter to close the app");
+                Thread.Sleep(sleepingTime);
+                Console.WriteLine("Press 'h' to view the last 5 calculations");
+                Thread.Sleep(sleepingTime);
+                Console.Write("or press any other key and Enter to continue: ");
+                string? userInput = Console.ReadLine();
                 if (userInput == "n") endApp = true;
-                if (userInput == "h") calculator.ViewHistory(history);
+                if (userInput == "h")
+                {
+                    double? selectedResult = null;
+                    selectedResult = calculator.ViewHistory(history);
+                    if (selectedResult != null)
+                    {
+                        num1Placeholder = (double)selectedResult;
+                        skipNum1 = true;
+                    }
+                }
 
                 Console.WriteLine("\n"); // Friendly linespacing.
             }

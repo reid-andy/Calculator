@@ -9,6 +9,7 @@ namespace CalculatorLibrary
     public class Calculator
     {
         JsonWriter writer;
+        int sleepingTime = 400;
         public Calculator()
         {
             StreamWriter logfile = File.CreateText("calculator.json");
@@ -78,13 +79,48 @@ namespace CalculatorLibrary
             writer.Close();
         }
 
-        public void ViewHistory(List<Calculation> calculations)
+        public double? ViewHistory(List<Calculation> calculations)
         {
-            int lastEntry = Math.Max(0, calculations.Count - 5);
-            for (int i = calculations.Count - 1; i >= lastEntry; i--)
+            bool quit = false;
+            string? userInput = "";
+            List<Calculation> historyOptions = new List<Calculation>();
+            while (!quit)
             {
-                Console.WriteLine(calculations[i].CalculationResult());
+                int lastEntry = Math.Max(0, calculations.Count - 5);
+                for (int i = calculations.Count - 1; i >= lastEntry; i--)
+                {
+                    Console.WriteLine(calculations[i].CalculationResult());
+                    historyOptions.Add(calculations[i]);
+                }
+
+                Console.WriteLine("To use a previous result press the entry number, then press Enter");
+                Console.WriteLine("To delete this history press 'd' then press Enter");
+                Console.Write("or press any other key then Enter to return to the calculator: ");
+
+                userInput = Console.ReadLine();
+                int historyOption;
+                if (int.TryParse(userInput, out historyOption))
+                {
+                    foreach (Calculation item in historyOptions)
+                    {
+                        if (item.calculationId == historyOption)
+                        {
+                            return item.result;
+                        }
+                    }
+                }
+
+                if (userInput == "d")
+                {
+                    calculations.Clear();
+                }
+
+                quit = true;
+                return null;
+
             }
+
+            return null;
         }
 
     }
@@ -117,11 +153,23 @@ namespace CalculatorLibrary
         }
         public Calculation(double num1, double num2, double result, string? operation, int counter)
         {
+            string convertOperation = operation switch
+            {
+                "a" => "+",
+                "s" => "-",
+                "m" => "*",
+                "d" => "/",
+                "e" => "^",
+                "t" => "x10",
+                _ => "unknown"
+            };
+
             this.num1 = num1;
             this.num2 = num2;
             this.result = result;
-            this.operation = operation;
+            this.operation = convertOperation;
             this.calculationId = counter;
+
         }
     }
 }
