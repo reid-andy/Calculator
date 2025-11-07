@@ -86,6 +86,7 @@ namespace CalculatorLibrary
             List<Calculation> historyOptions = new List<Calculation>();
             while (!quit)
             {
+                Console.WriteLine();
                 int lastEntry = Math.Max(0, calculations.Count - 5);
                 for (int i = calculations.Count - 1; i >= lastEntry; i--)
                 {
@@ -93,9 +94,9 @@ namespace CalculatorLibrary
                     historyOptions.Add(calculations[i]);
                 }
 
-                Console.WriteLine("To use a previous result press the entry number, then press Enter");
-                Console.WriteLine("To delete this history press 'd' then press Enter");
-                Console.Write("or press any other key then Enter to return to the calculator: ");
+                Console.WriteLine("\nTo use a previous result press the entry number, then press Enter");
+                Console.WriteLine("\nTo delete this history press 'd' then press Enter");
+                Console.Write("\nor press any other key then Enter to return to the calculator: ");
 
                 userInput = Console.ReadLine();
                 int historyOption;
@@ -149,7 +150,7 @@ namespace CalculatorLibrary
         }
         public string CalculationResult()
         {
-            return $"#{calculationId}: {num1} {operation} {num2} = {result}";
+            return $"#{calculationId}: {Math.Round(num1, 2)} {operation} {Math.Round(num2, 2)} = {Math.Round(result, 2)}";
         }
         public Calculation(double num1, double num2, double result, string? operation, int counter)
         {

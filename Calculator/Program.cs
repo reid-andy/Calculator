@@ -12,7 +12,6 @@ namespace CalculatorProgram
             bool skipNum1 = false;
             int counter = 0;
             double num1Placeholder = 0;
-            int sleepingTime = 400;
 
             List<Calculation> history = new List<Calculation>();
 
@@ -67,7 +66,7 @@ namespace CalculatorProgram
                 Console.WriteLine("\tm - Multiply");
                 Console.WriteLine("\td - Divide");
                 Console.WriteLine("\te - Exponent");
-                Console.WriteLine("\tt - 10x");
+                Console.WriteLine("\tt - 10x\n");
                 Console.Write("Your option? ");
 
                 string? op = Console.ReadLine();
@@ -81,7 +80,7 @@ namespace CalculatorProgram
                     }
                     else
                     {
-                        Console.WriteLine("Your result: {0:0.##}\n", result);
+                        Console.WriteLine("\nYour result: {0:0.##}\n", result);
                         Calculation calculation = new Calculation(cleanNum1, cleanNum2, result, op, counter);
                         history.Add(calculation);
                     }
@@ -98,11 +97,8 @@ namespace CalculatorProgram
                 else Console.WriteLine($"{counter} calculations completed this session\n");
 
                 // Wait for the user to respond before closing.
-                Thread.Sleep(sleepingTime);
-                Console.WriteLine("Press 'n' and Enter to close the app");
-                Thread.Sleep(sleepingTime);
-                Console.WriteLine("Press 'h' to view the last 5 calculations");
-                Thread.Sleep(sleepingTime);
+                Console.WriteLine("Press 'n' and Enter to close the app\n");
+                Console.WriteLine("Press 'h' to view the last 5 calculations\n");
                 Console.Write("or press any other key and Enter to continue: ");
                 string? userInput = Console.ReadLine();
                 if (userInput == "n") endApp = true;
